@@ -1,27 +1,38 @@
 import { FC } from 'react';
-import styled from 'styled-components';
 
-import { IWeather } from '../../types/types';
-import SidebarInfo from '../sidebarInfo/sidebarInfo';
-import SidebarSearch from '../sidebarSearch/sidebarSearch';
+import { IWeather, IWeekForecast } from '../../types/types';
 
-const StyledSidebar = styled.div`
-  width: 330px;
-  background: #fff;
-  height: 630px;
-  box-shadow: 5px 0px 14px rgba(0, 0, 0, 0.1);
-  padding: 30px 25px 40px 25px;
-`;
+import SidebarInfo from './SidebarInfo';
+import SidebarSearch from './SidebarSearch';
+import { StyledSidebar } from './SidebarStyles';
 
 interface SidebarProps {
   weather: IWeather;
+  setWeather: (weather: IWeather) => void;
+  setWeekWeatherData: (weather: IWeekForecast) => void;
+  weekWeatherData: IWeekForecast;
+  units: string;
 }
 
-const Sidebar: FC<SidebarProps> = ({ weather }) => {
+const Sidebar: FC<SidebarProps> = ({
+  units,
+  weather,
+  setWeather,
+  setWeekWeatherData,
+  weekWeatherData,
+}) => {
   return (
     <StyledSidebar>
-      <SidebarSearch />
-      <SidebarInfo weather={weather} />
+      <SidebarSearch
+        units={units}
+        setWeather={setWeather}
+        setWeekWeatherData={setWeekWeatherData}
+      />
+      <SidebarInfo
+        weather={weather}
+        weekWeatherData={weekWeatherData}
+        units={units}
+      />
     </StyledSidebar>
   );
 };

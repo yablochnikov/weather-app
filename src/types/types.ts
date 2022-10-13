@@ -51,3 +51,28 @@ export interface IWeather {
   name?: string;
   cod?: number;
 }
+
+export interface IWeekForecast {
+  daily?: {
+    dt?: number;
+    temp?: {
+      min?: number;
+      max?: number;
+    };
+    weather?: IWeatherData[];
+    uvi: number;
+    sunrise?: number;
+    sunset?: number;
+    humidity?: number;
+    wind_speed?: number;
+  }[];
+  timezone?: string;
+  timezone_offset?: number;
+  lon?: number;
+  lat?: number;
+  hourly?: {
+    dt?: number;
+    temp: number;
+    weather?: IWeatherData[];
+  }[];
+}

@@ -1,17 +1,15 @@
 import styled from 'styled-components';
 
-const StyledSidebarInfo = styled.div`
-  margin-top: 65px;
+export const StyledSidebarInfo = styled.div`
+  margin-top: 50px;
 `;
 
-const StyledSidebarInfoImage = styled.img`
-  height: 188px;
-  width: 212px;
+export const StyledSidebarInfoImage = styled.img`
   display: block;
   margin: auto;
 `;
 
-const StyledSidebarInfoLocation = styled.div`
+export const StyledSidebarInfoLocation = styled.div`
   margin-top: 39px;
   h1 {
     font-weight: 300;
@@ -40,14 +38,14 @@ const StyledSidebarInfoLocation = styled.div`
   }
 `;
 
-const StyledSidebarInfoDivider = styled.div`
+export const StyledSidebarInfoDivider = styled.div`
   margin-top: 16px;
   width: 100%;
   height: 1px;
   background-color: #b9b9b9;
 `;
 
-const StyledSidebarInfoWeatherStatus = styled.div`
+export const StyledSidebarInfoWeatherStatus = styled.div`
   div {
     margin-top: 12px;
     display: flex;
@@ -60,11 +58,3 @@ const StyledSidebarInfoWeatherStatus = styled.div`
     }
   }
 `;
-
-export const styles = {
-  StyledSidebarInfo,
-  StyledSidebarInfoImage,
-  StyledSidebarInfoLocation,
-  StyledSidebarInfoDivider,
-  StyledSidebarInfoWeatherStatus,
-};
