@@ -1,12 +1,22 @@
 import { useEffect, useState } from 'react';
+import { ThemeProvider } from 'styled-components';
 
 import Main from '../components/Main/Main';
 import Sidebar from '../components/Sidebar/Sidebar';
-import Spinner from '../components/Spinner/Spinner';
+import Spinner from '../components/spinner/spinner';
 import useWeatherService from '../services/weatherService';
+import GlobalStyles from '../styles/Global';
 import { IWeather, IWeekForecast } from '../types/types';
 
-import { AppWrapper } from './AppStyles';
+import { Container } from './Styles.app';
+
+const theme = {
+  sidebarBg: '#fff',
+  mainBg: '#f6f6f8',
+  additionalGray: '#b9b9b9',
+  progressBar: '#444EC8',
+  active: '#000',
+};
 
 function App() {
   const [weather, setWeather] = useState<IWeather>({});
@@ -63,29 +73,32 @@ function App() {
   }, [units]);
 
   return (
-    <AppWrapper>
-      {isWeatherLoaded ? (
-        <>
-          <Sidebar
-            units={units}
-            weather={weather}
-            setWeather={setWeather}
-            setWeekWeatherData={setWeekWeatherData}
-            weekWeatherData={weekWeatherData}
-          />
-          <Main
-            weekWeatherData={weekWeatherData}
-            setUnits={setUnits}
-            visibility={weather.visibility || NaN}
-            units={units}
-            hourlyOrWeekly={hourlyOrWeekly}
-            setHourlyOrWeekly={setHourlyOrWeekly}
-          />
-        </>
-      ) : (
-        <Spinner />
-      )}
-    </AppWrapper>
+    <>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        {isWeatherLoaded ? (
+          <Container>
+            <Sidebar
+              units={units}
+              weather={weather}
+              setWeather={setWeather}
+              setWeekWeatherData={setWeekWeatherData}
+              weekWeatherData={weekWeatherData}
+            />
+            <Main
+              weekWeatherData={weekWeatherData}
+              setUnits={setUnits}
+              visibility={weather.visibility || NaN}
+              units={units}
+              hourlyOrWeekly={hourlyOrWeekly}
+              setHourlyOrWeekly={setHourlyOrWeekly}
+            />
+          </Container>
+        ) : (
+          <Spinner />
+        )}
+      </ThemeProvider>
+    </>
   );
 }
 

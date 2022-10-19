@@ -4,22 +4,23 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import homeIcon from '../../assets/icons/homeIcon.svg';
 import searchIcon from '../../assets/icons/searchIcon.png';
 import useWeatherService from '../../services/weatherService';
-import { getPosition } from '../../shared/position';
 import { IWeather, IWeekForecast } from '../../types/types';
+import { getPosition } from '../../utils/position';
 
+import SidebarInputSuggestions from './SidebarInputSuggestions';
 import {
-  SidebarButton,
-  SidebarInput,
-  StyledSidebarSearch,
-} from './SidebarSearchStyles';
+  StyledHeaderButton,
+  StyledHeaderInput,
+  StyledSidebarHeader,
+} from './Styles.sidebarHeader';
 
-interface SidebarSearchProps {
+interface SidebarHeaderProps {
   setWeather: (weather: IWeather) => void;
   setWeekWeatherData: (weather: IWeekForecast) => void;
   units: string;
 }
 
-const SidebarSearch: FC<SidebarSearchProps> = ({
+const SidebarHeader: FC<SidebarHeaderProps> = ({
   units,
   setWeather,
   setWeekWeatherData,
@@ -28,7 +29,7 @@ const SidebarSearch: FC<SidebarSearchProps> = ({
   const { getWeatherByCity, getWeatherForWeek } = useWeatherService();
 
   return (
-    <StyledSidebarSearch>
+    <StyledSidebarHeader>
       <PlacesAutocomplete
         value={location}
         onChange={setLocation}
@@ -44,40 +45,31 @@ const SidebarSearch: FC<SidebarSearchProps> = ({
             res ? setWeather(res) : null;
           })
         }
+        searchOptions={{ types: ['locality', 'country'] }}
       >
         {({ getInputProps, suggestions }) => (
           <>
-            <SidebarInput
+            <StyledHeaderInput
               searchIcon={searchIcon}
               {...getInputProps()}
               list="places"
               type="text"
-              placeholder="search for places ..."
+              placeholder="search for places..."
             />
-            <div>
-              <datalist id="places">
-                {suggestions.map((suggestion) => {
-                  return (
-                    <option
-                      key={suggestion.id}
-                      value={suggestion.formattedSuggestion.mainText}
-                    />
-                  );
-                })}
-              </datalist>
-            </div>
+
+            <SidebarInputSuggestions suggestions={suggestions} />
           </>
         )}
       </PlacesAutocomplete>
-      <SidebarButton
+      <StyledHeaderButton
         onClick={() => {
           getPosition(setWeather, setWeekWeatherData, units);
         }}
       >
         <img src={homeIcon} alt="home" />
-      </SidebarButton>
-    </StyledSidebarSearch>
+      </StyledHeaderButton>
+    </StyledSidebarHeader>
   );
 };
 
-export default SidebarSearch;
+export default SidebarHeader;

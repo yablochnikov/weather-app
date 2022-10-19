@@ -1,21 +1,32 @@
-import { FC } from 'react';
-import ProgressBar from 'react-bootstrap/ProgressBar';
+// eslint-disable-next-line simple-import-sort/imports
 import GoogleMapReact from 'google-map-react';
+import { FC } from 'react';
 
 import maxTemp from '../../assets/icons/maxTemp.svg';
 import minTemp from '../../assets/icons/minTemp.svg';
 import sunrise from '../../assets/icons/sunrise.svg';
 import sunset from '../../assets/icons/sunset.svg';
+import windIcon from '../../assets/icons/wind-icon.png';
 import { IWeekForecast } from '../../types/types';
 import Map from '../Map/Map';
 import UVIndexChart from '../UVIndexChart/UVIndexChart';
-
+import HumidityInfo from './HumidityInfo';
 import {
+  CardBody,
+  CardImg,
+  CardLabel,
   DayInfo,
   DayInfoCard,
   InfoWrapper,
   MapWrapper,
-} from './TodaysHighlightsInfoStyles';
+  ProgressBar,
+  ProgressBarWrapper,
+} from './Styles.todaysHighlightsInfo';
+import SunriseSunsetInfo from './SunriseSunsetInfo';
+import TemperatureInfo from './TemperatureInfo';
+import UVInfo from './UVInfo';
+import VisibilityInfo from './VisibilityInfo';
+import WindInfo from './WindInfo';
 
 interface TodayHighlightsInfoProps {
   weekWeatherData: IWeekForecast;
@@ -39,93 +50,119 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
     <InfoWrapper>
       <DayInfo>
         <DayInfoCard style={{ position: 'relative' }}>
-          <p className="cardLabel">UV Index</p>
-          <p className="uv">
-            {weekWeatherData.daily &&
-              Math.round(weekWeatherData.daily[0].uvi as number)}
-          </p>
-          <UVIndexChart
-            uvIndex={
-              weekWeatherData.daily && (weekWeatherData.daily[0].uvi as number)
-            }
-          />
+          <CardLabel>UV Index</CardLabel>
+          <CardBody>
+            <UVInfo
+              data={
+                weekWeatherData.daily &&
+                (weekWeatherData.daily[0].uvi as number)
+              }
+            >
+              <UVIndexChart
+                uvIndex={
+                  weekWeatherData.daily &&
+                  (weekWeatherData.daily[0].uvi as number)
+                }
+              />
+            </UVInfo>
+          </CardBody>
         </DayInfoCard>
         <DayInfoCard>
-          <p className="cardLabel">Wind status</p>
-          <p className="cardData">
-            {weekWeatherData.daily &&
-              Math.round(weekWeatherData.daily[0].wind_speed as number)}
-            <span> {units === 'metric' ? 'KM/H' : 'MPH'} </span>
-          </p>
+          <CardLabel>Wind status</CardLabel>
+          <CardBody>
+            <WindInfo
+              data={
+                weekWeatherData.daily &&
+                Math.round(weekWeatherData.daily[0].wind_speed as number)
+              }
+              units={units}
+            />
+            <CardImg src={windIcon} width={40} height={25} marginTop={18} />
+          </CardBody>
         </DayInfoCard>
         <DayInfoCard>
-          <p className="cardLabel">Sunrise & Sunset</p>
-          <div>
-            <img src={sunrise} alt="sunrise" />
-            {weekWeatherData.daily &&
-              new Date(
-                (weekWeatherData.daily[0].sunrise as number) * 1000,
-              ).getHours()}
-            :
-            {weekWeatherData.daily &&
-              new Date(
-                (weekWeatherData.daily[0].sunrise as number) * 1000,
-              ).getMinutes()}
-          </div>
-          <div>
-            <img src={sunset} alt="sunrise" />
-            {weekWeatherData.daily &&
-              new Date(
-                (weekWeatherData.daily[0].sunset as number) * 1000,
-              ).getHours()}
-            :
-            {weekWeatherData.daily &&
-              new Date(
-                (weekWeatherData.daily[0].sunset as number) * 1000,
-              ).getMinutes()}
-          </div>
+          <CardLabel>Sunrise & Sunset</CardLabel>
+          <CardBody>
+            <SunriseSunsetInfo
+              img={sunrise}
+              alt="sunrise"
+              hours={
+                weekWeatherData.daily &&
+                new Date(
+                  (weekWeatherData.daily[0].sunrise as number) * 1000,
+                ).getHours()
+              }
+              minutes={
+                weekWeatherData.daily &&
+                new Date(
+                  (weekWeatherData.daily[0].sunrise as number) * 1000,
+                ).getMinutes()
+              }
+            />
+            <SunriseSunsetInfo
+              img={sunset}
+              alt="sunset"
+              hours={
+                weekWeatherData.daily &&
+                new Date(
+                  (weekWeatherData.daily[0].sunset as number) * 1000,
+                ).getHours()
+              }
+              minutes={
+                weekWeatherData.daily &&
+                new Date(
+                  (weekWeatherData.daily[0].sunset as number) * 1000,
+                ).getMinutes()
+              }
+            />
+          </CardBody>
+        </DayInfoCard>
+        <DayInfoCard style={{ position: 'relative' }}>
+          <CardLabel>Humidity</CardLabel>
+          <CardBody>
+            <HumidityInfo
+              data={weekWeatherData.daily && weekWeatherData.daily[0].humidity}
+            ></HumidityInfo>
+            <ProgressBarWrapper>
+              <ProgressBar
+                percent={
+                  weekWeatherData.daily && weekWeatherData.daily[0].humidity
+                }
+              />
+            </ProgressBarWrapper>
+          </CardBody>
         </DayInfoCard>
         <DayInfoCard>
-          <p className="cardLabel">Humidity</p>
-          <p className="cardData">
-            {weekWeatherData.daily && weekWeatherData.daily[0].humidity}
-            <span>%</span>
-          </p>
-          <ProgressBar
-            now={weekWeatherData.daily && weekWeatherData.daily[0].humidity}
-          />
+          <CardLabel>Visibility</CardLabel>
+          <CardBody>
+            <VisibilityInfo data={visibility} />
+          </CardBody>
         </DayInfoCard>
         <DayInfoCard>
-          <p className="cardLabel">Visibility</p>
-          <p className="cardData">
-            {Math.round(visibility)}
-            <span>km/h</span>
-          </p>
-          <p>{visibility < 3 ? 'Low visibility' : ''}</p>
-          <p>{visibility < 6 && visibility > 3 ? 'Medium visibility' : ''}</p>
-          <p>{visibility > 6 ? 'High visibility' : ''}</p>
-        </DayInfoCard>
-        <DayInfoCard>
-          <p className="cardLabel">Min & Max temperature</p>
-          <div>
-            <img src={minTemp} alt="min temperature" />
-            <p className="cardData">
-              {weekWeatherData.daily &&
-                Math.round(weekWeatherData.daily[0].temp?.min as number)}
-            </p>
-          </div>
-          <div>
-            <img src={maxTemp} alt="max temperature" />
-            <p className="cardData">
-              {weekWeatherData.daily &&
-                Math.round(weekWeatherData.daily[0].temp?.max as number)}
-            </p>
-          </div>
+          <CardLabel>Min & Max temperature</CardLabel>
+          <CardBody>
+            <TemperatureInfo
+              img={minTemp}
+              data={
+                weekWeatherData.daily &&
+                Math.round(weekWeatherData.daily[0].temp?.min as number)
+              }
+            />
+            <TemperatureInfo
+              img={maxTemp}
+              data={
+                weekWeatherData.daily &&
+                Math.round(weekWeatherData.daily[0].temp?.max as number)
+              }
+            />
+          </CardBody>
         </DayInfoCard>
       </DayInfo>
       <MapWrapper>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyBXWOCwPDo2Icl2UrYM0Mgu-Gj1xqcTzlY' }}
+          bootstrapURLKeys={{
+            key: process.env.REACT_APP_GOOGLE_API_KEY as string,
+          }}
           defaultCenter={centerCords}
           center={centerCords}
           defaultZoom={13}

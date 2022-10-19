@@ -1,10 +1,12 @@
 import { FC } from 'react';
 
 import {
+  StyledButtonDays,
+  StyledButtonMetric,
   StyledDaysChange,
   StyledMainHeader,
   StyledMetricChange,
-} from './MainHeaderStyles';
+} from './Styles.mainHeader';
 
 interface MainHeaderProps {
   setUnits: (units: string) => void;
@@ -12,6 +14,10 @@ interface MainHeaderProps {
   hourlyOrWeekly: string;
   setHourlyOrWeekly: (value: string) => void;
 }
+
+const handleClick = (func: (string: string) => void, string: string) => {
+  func(string);
+};
 
 const MainHeader: FC<MainHeaderProps> = ({
   setUnits,
@@ -22,32 +28,36 @@ const MainHeader: FC<MainHeaderProps> = ({
   return (
     <StyledMainHeader>
       <StyledDaysChange>
-        <button
-          onClick={() => setHourlyOrWeekly('hourly')}
-          className={hourlyOrWeekly === 'hourly' ? 'active' : ''}
+        <StyledButtonDays
+          onClick={() => handleClick(setHourlyOrWeekly, 'hourly')}
+          hourlyOrWeekly={hourlyOrWeekly}
+          time={'hourly'}
         >
           Today
-        </button>
-        <button
-          onClick={() => setHourlyOrWeekly('weekly')}
-          className={hourlyOrWeekly === 'weekly' ? 'active' : ''}
+        </StyledButtonDays>
+        <StyledButtonDays
+          onClick={() => handleClick(setHourlyOrWeekly, 'weekly')}
+          time={'weekly'}
+          hourlyOrWeekly={hourlyOrWeekly}
         >
           Week
-        </button>
+        </StyledButtonDays>
       </StyledDaysChange>
       <StyledMetricChange>
-        <button
-          onClick={() => setUnits('metric')}
-          className={units === 'metric' ? 'active' : ''}
+        <StyledButtonMetric
+          units={units}
+          selectedUnits={'metric'}
+          onClick={() => handleClick(setUnits, 'metric')}
         >
           &deg;C
-        </button>
-        <button
-          onClick={() => setUnits('imperial')}
-          className={units === 'imperial' ? 'active' : ''}
+        </StyledButtonMetric>
+        <StyledButtonMetric
+          units={units}
+          selectedUnits={'imperial'}
+          onClick={() => handleClick(setUnits, 'imperial')}
         >
           &deg;F
-        </button>
+        </StyledButtonMetric>
       </StyledMetricChange>
     </StyledMainHeader>
   );

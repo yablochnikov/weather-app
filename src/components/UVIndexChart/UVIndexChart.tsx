@@ -7,36 +7,34 @@ interface UVIndexChatProps {
 const UVIndexChart: FC<UVIndexChatProps> = ({ uvIndex }) => {
   ChartJS.register(ArcElement);
 
-  const percent = (uvIndex as number) / 15;
+  const percent = (uvIndex as number) / 12;
   const data = {
     labels: [],
 
     datasets: [
       {
-        data: [percent * 15, 15 - percent * 15],
-        backgroundColor: ['#F9B903', '#ccc'],
+        data: [percent * 12, 12 - percent * 12],
+        backgroundColor: ['#FBDA4C', '#f6f6f8'],
       },
     ],
     options: {
       rotation: 270,
       circumference: 180,
-      cutout: 67,
+      cutout: 70,
     },
   };
 
   return (
-    <div>
-      <Doughnut
-        data={data}
-        style={{
-          width: 140,
-          height: 70,
-          position: 'absolute',
-          bottom: '-25px',
-        }}
-        options={data.options}
-      />
-    </div>
+    <Doughnut
+      data={data}
+      style={{
+        width: 140,
+        height: 70,
+        position: 'absolute',
+        bottom: '-25px',
+      }}
+      options={data.options}
+    />
   );
 };
 

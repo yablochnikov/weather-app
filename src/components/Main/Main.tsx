@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import { IWeekForecast } from '../../types/types';
+import Forecast from '../Forecast/Forecast';
 import TodaysHighlights from '../TodaysHighlights/TodaysHighlights';
-import WeeklyForecast from '../WeeklyForecast/WeeklyForecast';
 
 import MainHeader from './MainHeader';
-import { StyledMain } from './MainStyles';
+import { StyledMain } from './Styles.main';
 
 interface MainProps {
   weekWeatherData: IWeekForecast;
@@ -32,7 +32,7 @@ const Main: FC<MainProps> = ({
         hourlyOrWeekly={hourlyOrWeekly}
         setHourlyOrWeekly={setHourlyOrWeekly}
       />
-      <WeeklyForecast
+      <Forecast
         weekWeatherData={weekWeatherData}
         hourlyOrWeekly={hourlyOrWeekly}
       />

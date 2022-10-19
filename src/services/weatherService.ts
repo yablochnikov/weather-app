@@ -3,8 +3,7 @@ import axios from 'axios';
 import { IWeather, IWeekForecast } from '../types/types';
 
 const useWeatherService = () => {
-  const _apiKey = '2d6a44f98c2ab61df1d66550ecc9286f';
-
+  const _apiKey = process.env.REACT_APP_WEATHER_API_KEY;
   const getWeatherByCity = async (city: string, units: string) => {
     try {
       const response = await axios.get<IWeather>(
@@ -21,7 +20,7 @@ const useWeatherService = () => {
       const response = await axios.get<IWeekForecast>(
         `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=${units}&exclude=current,minutely,alerts&appid=${_apiKey}`,
       );
-      console.log(response.data);
+
       return response.data;
     } catch (error) {
       console.log(error);
@@ -38,6 +37,10 @@ const useWeatherService = () => {
       console.log('Error: ' + error);
     }
   };
+
+  // const transformData = (data: any) => {
+  //   console.log(data);
+  // };
 
   return {
     getWeatherByCity,
