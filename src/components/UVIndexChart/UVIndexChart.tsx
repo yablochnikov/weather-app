@@ -18,9 +18,8 @@ const UVIndexChart: FC<UVIndexChatProps> = ({ uvIndex }) => {
       },
     ],
     options: {
-      rotation: 270,
-      circumference: 180,
-      cutout: 70,
+      responsive: true,
+      maintainAspectRatio: true,
     },
   };
 
@@ -28,12 +27,15 @@ const UVIndexChart: FC<UVIndexChatProps> = ({ uvIndex }) => {
     <Doughnut
       data={data}
       style={{
-        width: 140,
-        height: 70,
         position: 'absolute',
+        objectFit: 'contain',
         bottom: '-25px',
       }}
-      options={data.options}
+      options={{
+        rotation: 270,
+        circumference: 180,
+        cutout: 70,
+      }}
     />
   );
 };

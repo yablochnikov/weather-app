@@ -10,6 +10,7 @@ import SidebarHeader from './SidebarHeader';
 import SidebarTemp from './SidebarTemp';
 import {
   Content,
+  SidebarInfo,
   StyledLocation,
   StyledSidebarDivider,
   StyledSidebarImage,
@@ -42,34 +43,40 @@ const Sidebar: FC<SidebarProps> = ({
         setWeather={setWeather}
         setWeekWeatherData={setWeekWeatherData}
       />
-      <StyledSidebarImage
-        src={image}
-        alt={weather.weather?.[0].description || ''}
-      />
-      <SidebarTemp
-        units={units}
-        weekWeatherData={weekWeatherData}
-        temp={Math.round(weather.main?.temp as number)}
-      />
-
-      <StyledLocation>{`${weather.name}, ${weather.sys?.country}`}</StyledLocation>
-
-      <SidebarDay weekWeatherData={weekWeatherData} />
-
-      <StyledSidebarDivider />
-
-      <StyledSidebarWeatherStatus>
-        <WeatherStatusBlock
-          img={cloud}
-          alt="cloud"
-          text={`${weather.weather?.[0].main || ''} - ${weather.clouds?.all}%`}
+      <SidebarInfo>
+        <StyledSidebarImage
+          src={image}
+          alt={weather.weather?.[0].description || ''}
         />
-        <WeatherStatusBlock
-          img={infoIcon}
-          alt="info"
-          text={`${toCapitalize(weather.weather?.[0].description || '')}`}
+        <SidebarTemp
+          units={units}
+          weekWeatherData={weekWeatherData}
+          temp={Math.round(weather.main?.temp as number)}
         />
-      </StyledSidebarWeatherStatus>
+
+        <StyledLocation>
+          {weather.name} <span>,{weather.sys?.country}</span>
+        </StyledLocation>
+
+        <SidebarDay weekWeatherData={weekWeatherData} />
+
+        <StyledSidebarDivider />
+
+        <StyledSidebarWeatherStatus>
+          <WeatherStatusBlock
+            img={cloud}
+            alt="cloud"
+            text={`${weather.weather?.[0].main || ''} - ${
+              weather.clouds?.all
+            }%`}
+          />
+          <WeatherStatusBlock
+            img={infoIcon}
+            alt="info"
+            text={`${toCapitalize(weather.weather?.[0].description || '')}`}
+          />
+        </StyledSidebarWeatherStatus>
+      </SidebarInfo>
     </Content>
   );
 };

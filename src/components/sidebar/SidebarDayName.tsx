@@ -16,6 +16,12 @@ const StyledDay = styled.p`
     color: ${(props) => props.theme.additionalGray};
     font-weight: 500;
   }
+  @media (max-width: 1024px) {
+    margin-top: 0;
+  }
+  @media (max-width: 425px) {
+    display: none;
+  }
 `;
 
 const SidebarDay: FC<SidebarDayNameProps> = ({ weekWeatherData }) => {

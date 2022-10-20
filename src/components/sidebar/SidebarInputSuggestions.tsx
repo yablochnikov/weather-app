@@ -14,7 +14,7 @@ const SidebarInputSuggestions: FC<SidebarInputSuggestionsProps> = ({
         {suggestions.map((suggestion) => {
           return (
             <option
-              key={suggestion.id}
+              key={suggestion.index}
               value={suggestion.formattedSuggestion.mainText}
             />
           );

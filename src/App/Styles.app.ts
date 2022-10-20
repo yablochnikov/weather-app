@@ -5,4 +5,7 @@ export const Container = styled.div`
   min-height: 100vh;
   background-color: ${(props) => props.theme.mainBg};
   display: flex;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;

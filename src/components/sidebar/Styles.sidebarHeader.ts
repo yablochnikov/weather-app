@@ -8,12 +8,20 @@ export const StyledSidebarHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  @media (max-width: 1024px) {
+    width: 40%;
+  }
+  @media (max-width: 425px) {
+    width: 70%;
+  }
 `;
 
 export const StyledHeaderInput = styled.input<SearchInputProps>`
-  width: 240px;
+  height: 30px;
+  width: 75%;
   background: ${(props) => props.theme.mainBg}
-    url(${(props) => props.searchIcon}) 5% no-repeat;
+    url(${(props) => props.searchIcon}) 2% no-repeat;
   border-radius: 15px;
   outline: none;
   border: none;
@@ -24,6 +32,13 @@ export const StyledHeaderInput = styled.input<SearchInputProps>`
     font-weight: 400;
     font-size: 14px;
   }
+  @media (max-width: 1024px) {
+    height: 40px;
+    width: 75%;
+  }
+  @media (max-width: 425px) {
+    width: 100%;
+  }
 `;
 
 export const StyledHeaderButton = styled.button`
@@ -32,4 +47,8 @@ export const StyledHeaderButton = styled.button`
   border-radius: 100%;
   border: none;
   cursor: pointer;
+  @media (max-width: 1024px) {
+    width: 40px;
+    height: 40px;
+  }
 `;

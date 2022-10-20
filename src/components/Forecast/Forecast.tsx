@@ -16,9 +16,9 @@ const Forecast: FC<WeeklyForecastProps> = ({
   hourlyOrWeekly,
 }) => {
   return (
-    <StyledForecast>
+    <StyledForecast hourlyOrWeekly={hourlyOrWeekly}>
       {hourlyOrWeekly === 'weekly'
-        ? weekWeatherData.daily?.slice(0, 7).map((day, i) => {
+        ? weekWeatherData.daily?.map((day, i) => {
             return (
               <ForecastItem
                 img={`http://openweathermap.org/img/wn/${
@@ -32,7 +32,7 @@ const Forecast: FC<WeeklyForecastProps> = ({
               />
             );
           })
-        : weekWeatherData.hourly?.slice(0, 7).map((hour, i) => {
+        : weekWeatherData.hourly?.slice(0, 12).map((hour, i) => {
             return (
               <ForecastItem
                 img={`http://openweathermap.org/img/wn/${

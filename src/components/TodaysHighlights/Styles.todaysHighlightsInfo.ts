@@ -37,8 +37,15 @@ export const DayInfoCard = styled.div`
   height: 140px;
   box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
+  margin-bottom: 20px;
   background-color: ${(props) => props.theme.sidebarBg};
   padding: 12px;
+
+  @media (max-width: 1336px) {
+  }
+  @media (max-width: 1024px) {
+    margin-right: 10px;
+  }
 `;
 
 export const DayInfo = styled.div`
@@ -46,14 +53,22 @@ export const DayInfo = styled.div`
   flex-wrap: wrap;
   width: 65%;
   justify-content: space-between;
+  @media (max-width: 1336px) {
+    width: 100%;
+  }
+  @media (max-width: 1024px) {
+    justify-content: space-around;
+  }
 `;
 
 export const MapWrapper = styled.div`
   width: 300px;
-  height: 300px;
-  box-shadow: 0px 4px 14px -4px rgba(0, 0, 0, 0.25);
   div {
     border-radius: 12px;
+  }
+  @media (max-width: 1336px) {
+    width: 100%;
+    height: 300px;
   }
 `;
 

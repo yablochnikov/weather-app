@@ -5,7 +5,6 @@ import Main from '../components/Main/Main';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Spinner from '../components/spinner/spinner';
 import useWeatherService from '../services/weatherService';
-import GlobalStyles from '../styles/Global';
 import { IWeather, IWeekForecast } from '../types/types';
 
 import { Container } from './Styles.app';
@@ -75,7 +74,6 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <GlobalStyles />
         {isWeatherLoaded ? (
           <Container>
             <Sidebar
