@@ -63,6 +63,7 @@ export const DayInfo = styled.div`
 
 export const MapWrapper = styled.div`
   width: 300px;
+  height: 300px;
   div {
     border-radius: 12px;
   }

@@ -1,9 +1,11 @@
 import { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { ArcElement, Chart as ChartJS } from 'chart.js';
+
 interface UVIndexChatProps {
   uvIndex?: number;
 }
+
 const UVIndexChart: FC<UVIndexChatProps> = ({ uvIndex }) => {
   ChartJS.register(ArcElement);
 

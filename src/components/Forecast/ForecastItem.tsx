@@ -13,6 +13,7 @@ interface ForecastItemProps {
   dayname: string;
   minTemp?: number;
   maxTemp?: number;
+  units: string;
 }
 
 const ForecastItem: FC<ForecastItemProps> = ({
@@ -21,6 +22,7 @@ const ForecastItem: FC<ForecastItemProps> = ({
   alt,
   minTemp,
   maxTemp,
+  units,
 }) => {
   return (
     <StyledForecastItem>
@@ -29,11 +31,30 @@ const ForecastItem: FC<ForecastItemProps> = ({
       <StyledTemperatures className="min__temp">
         {minTemp ? (
           <>
-            <StyledMinTemp>{minTemp}&deg;</StyledMinTemp>
-            <StyledMaxTemp>{maxTemp}&deg;</StyledMaxTemp>
+            <StyledMinTemp>
+              {Math.round(
+                units === 'imperial'
+                  ? (minTemp * 9) / 5 + 32
+                  : (minTemp as number),
+              )}
+              &deg;
+            </StyledMinTemp>
+            <StyledMaxTemp>
+              {Math.round(
+                units === 'imperial'
+                  ? ((maxTemp as number) * 9) / 5 + 32
+                  : (maxTemp as number),
+              )}
+              &deg;
+            </StyledMaxTemp>
           </>
         ) : (
-          <StyledMaxTemp>{maxTemp}&deg;</StyledMaxTemp>
+          <StyledMaxTemp>
+            {units === 'imperial'
+              ? Math.round(((maxTemp as number) * 9) / 5 + 32)
+              : maxTemp}
+            &deg;
+          </StyledMaxTemp>
         )}
       </StyledTemperatures>
     </StyledForecastItem>

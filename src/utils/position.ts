@@ -11,7 +11,7 @@ export const getPosition = (
   navigator.geolocation.getCurrentPosition((pos) => {
     getWeatherByGeo(pos.coords.latitude, pos.coords.longitude, units).then(
       (res) => {
-        res ? setWeather(res) : null;
+        res && setWeather(res);
       },
     );
     getWeatherForWeek(pos.coords.latitude, pos.coords.longitude, units).then(

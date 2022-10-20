@@ -30,7 +30,7 @@ import WindInfo from './WindInfo';
 
 interface TodayHighlightsInfoProps {
   weekWeatherData: IWeekForecast;
-  visibility: number;
+  visibility?: number;
   units: string;
 }
 
@@ -44,7 +44,7 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
     lng: weekWeatherData.lon as number,
   };
 
-  visibility = visibility / 1000;
+  visibility = (visibility as number) / 1000;
 
   return (
     <InfoWrapper>
@@ -72,8 +72,7 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
           <CardBody>
             <WindInfo
               data={
-                weekWeatherData.daily &&
-                Math.round(weekWeatherData.daily[0].wind_speed as number)
+                weekWeatherData.daily && weekWeatherData.daily[0].wind_speed
               }
               units={units}
             />

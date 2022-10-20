@@ -42,7 +42,7 @@ const SidebarHeader: FC<SidebarHeaderProps> = ({
             ).then((res) => {
               res && setWeekWeatherData(res);
             });
-            res ? setWeather(res) : null;
+            res && setWeather(res);
           })
         }
         searchOptions={{ types: ['locality', 'country'] }}

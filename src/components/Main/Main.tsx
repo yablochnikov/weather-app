@@ -9,7 +9,7 @@ import { StyledMain } from './Styles.main';
 
 interface MainProps {
   weekWeatherData: IWeekForecast;
-  visibility: number;
+  visibility?: number;
   setUnits: (units: string) => void;
   units: string;
   hourlyOrWeekly: string;
@@ -33,6 +33,7 @@ const Main: FC<MainProps> = ({
         setHourlyOrWeekly={setHourlyOrWeekly}
       />
       <Forecast
+        units={units}
         weekWeatherData={weekWeatherData}
         hourlyOrWeekly={hourlyOrWeekly}
       />

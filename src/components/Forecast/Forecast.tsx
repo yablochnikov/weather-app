@@ -9,11 +9,13 @@ import { StyledForecast } from './ForecastStyles';
 interface WeeklyForecastProps {
   weekWeatherData: IWeekForecast;
   hourlyOrWeekly: string;
+  units: string;
 }
 
 const Forecast: FC<WeeklyForecastProps> = ({
   weekWeatherData,
   hourlyOrWeekly,
+  units,
 }) => {
   return (
     <StyledForecast hourlyOrWeekly={hourlyOrWeekly}>
@@ -21,6 +23,7 @@ const Forecast: FC<WeeklyForecastProps> = ({
         ? weekWeatherData.daily?.map((day, i) => {
             return (
               <ForecastItem
+                units={units}
                 img={`http://openweathermap.org/img/wn/${
                   day.weather && day.weather[0].icon
                 }.png`}
@@ -35,6 +38,7 @@ const Forecast: FC<WeeklyForecastProps> = ({
         : weekWeatherData.hourly?.slice(0, 12).map((hour, i) => {
             return (
               <ForecastItem
+                units={units}
                 img={`http://openweathermap.org/img/wn/${
                   hour.weather && hour.weather[0].icon
                 }.png`}

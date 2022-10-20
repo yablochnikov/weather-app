@@ -51,4 +51,7 @@ export const StyledHeaderButton = styled.button`
     width: 40px;
     height: 40px;
   }
+  @media (max-width: 425px) {
+    display: none;
+  }
 `;

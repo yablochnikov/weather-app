@@ -39,7 +39,7 @@ function App() {
         position.coords.longitude,
         units,
       ).then((data) => {
-        data ? setWeekWeatherData(data) : console.log(weekWeatherData);
+        data && setWeekWeatherData(data);
       });
       getWeatherByGeo(
         position.coords.latitude,
@@ -69,7 +69,7 @@ function App() {
 
   useEffect((): void => {
     getCurrentLocation();
-  }, [units]);
+  }, []);
 
   return (
     <>
@@ -86,7 +86,7 @@ function App() {
             <Main
               weekWeatherData={weekWeatherData}
               setUnits={setUnits}
-              visibility={weather.visibility || NaN}
+              visibility={weather.visibility}
               units={units}
               hourlyOrWeekly={hourlyOrWeekly}
               setHourlyOrWeekly={setHourlyOrWeekly}

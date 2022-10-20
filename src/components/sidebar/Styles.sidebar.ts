@@ -29,7 +29,7 @@ export const SidebarInfo = styled.div`
     justify-content: inherit;
   }
   @media (max-width: 425px) {
-    width: 30%;
+    width: 40%;
   }
 `;
 

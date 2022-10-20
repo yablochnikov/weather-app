@@ -13,7 +13,7 @@ interface SidebarTempProps {
 const SidebarTemp: FC<SidebarTempProps> = ({ units, temp }) => {
   return (
     <StyledHeading1>
-      {temp}&deg;
+      {Math.round(units === 'imperial' ? (temp * 9) / 5 + 32 : temp)}&deg;
       <span>{units === 'metric' ? 'C' : 'F'}</span>
     </StyledHeading1>
   );

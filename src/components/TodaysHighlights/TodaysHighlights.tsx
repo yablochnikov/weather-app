@@ -10,7 +10,7 @@ import TodayHighlightsInfo from './TodayHighlightsInfo';
 
 interface TodaysHighlightsProps {
   weekWeatherData: IWeekForecast;
-  visibility: number;
+  visibility?: number;
   units: string;
 }
 

@@ -7,7 +7,11 @@ interface WindInfoProps {
 const WindInfo: FC<WindInfoProps> = ({ data, units }) => {
   return (
     <div>
-      <span>{data}</span>
+      <span>
+        {Math.round(
+          units === 'imperial' ? (data as number) * 1.6 : (data as number),
+        )}
+      </span>
       {units === 'metric' ? 'km/h' : 'mp/h'}
     </div>
   );
