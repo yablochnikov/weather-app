@@ -4,8 +4,9 @@ import { ThemeProvider } from 'styled-components';
 import Main from '../components/Main/Main';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Spinner from '../components/spinner/spinner';
-import useWeatherService from '../services/weatherService';
+import ErrorBoundary from '../components/Toast/ErrorToast';
 import { IWeather, IWeekForecast } from '../types/types';
+import { getCurrentLocation } from '../utils/position';
 
 import { Container } from './Styles.app';
 
@@ -23,56 +24,25 @@ function App() {
   const [weekWeatherData, setWeekWeatherData] = useState<IWeekForecast>({});
   const [units, setUnits] = useState('metric');
   const [hourlyOrWeekly, setHourlyOrWeekly] = useState('weekly');
-  const { getWeatherByGeo, getWeatherForWeek } = useWeatherService();
+  const [isError, setError] = useState(false);
 
   const onWeatherLoaded = (weatherData: IWeather): void => {
     setWeather(weatherData);
     setWeatherLoaded(true);
   };
 
-  const getCurrentLocation = (): void => {
-    const successCallback = (position: {
-      coords: { latitude: number; longitude: number };
-    }) => {
-      getWeatherForWeek(
-        position.coords.latitude,
-        position.coords.longitude,
-        units,
-      ).then((data) => {
-        data && setWeekWeatherData(data);
-      });
-      getWeatherByGeo(
-        position.coords.latitude,
-        position.coords.longitude,
-        units,
-      ).then((data) => {
-        data && onWeatherLoaded(data);
-      });
-    };
-
-    const errorCallback = (error: { code: number; message: string }): void => {
-      console.log(error);
-    };
-
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    navigator.geolocation.getCurrentPosition(
-      successCallback,
-      errorCallback,
-      options,
-    );
-  };
-
   useEffect((): void => {
-    getCurrentLocation();
+    getCurrentLocation(units, setWeekWeatherData, onWeatherLoaded, setError);
   }, []);
+
+  const renderErrorMessage = () => {
+    return <>{isError && <ErrorBoundary />}</>;
+  };
 
   return (
     <>
+      {renderErrorMessage()}
+
       <ThemeProvider theme={theme}>
         {isWeatherLoaded ? (
           <Container>

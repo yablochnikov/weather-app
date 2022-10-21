@@ -21,3 +21,46 @@ export const getPosition = (
     );
   });
 };
+
+export const getCurrentLocation = (
+  units: string,
+  setWeekWeatherData: React.Dispatch<React.SetStateAction<IWeekForecast>>,
+  onWeatherLoaded: (weatherData: IWeather) => void,
+  setError: React.Dispatch<React.SetStateAction<boolean>>,
+): void => {
+  const successCallback = (position: {
+    coords: { latitude: number; longitude: number };
+  }) => {
+    getWeatherForWeek(
+      position.coords.latitude,
+      position.coords.longitude,
+      units,
+    ).then((data) => {
+      data && setWeekWeatherData(data);
+    });
+    getWeatherByGeo(
+      position.coords.latitude,
+      position.coords.longitude,
+      units,
+    ).then((data) => {
+      data && onWeatherLoaded(data);
+    });
+  };
+
+  const errorCallback = (error: { code: number; message: string }): void => {
+    setError(true);
+    throw new Error(error.message);
+  };
+
+  const options = {
+    enableHighAccuracy: true,
+    maximumAge: 0,
+    timeout: 1000,
+  };
+
+  navigator.geolocation.getCurrentPosition(
+    successCallback,
+    errorCallback,
+    options,
+  );
+};

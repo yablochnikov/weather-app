@@ -38,10 +38,6 @@ const useWeatherService = () => {
     }
   };
 
-  // const transformData = (data: any) => {
-  //   console.log(data);
-  // };
-
   return {
     getWeatherByCity,
     getWeatherByGeo,
