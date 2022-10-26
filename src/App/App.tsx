@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import Main from '../components/Main/Main';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Spinner from '../components/spinner/spinner';
 import ErrorBoundary from '../components/Toast/ErrorToast';
-import { IWeather, IWeekForecast } from '../types/types';
-import { getCurrentLocation } from '../utils/position';
+import { useAppDispatch, useAppSelector } from '../hooks/useTypedSelector';
+import { fetchGeoWeather, fetchWeekWeather } from '../store/actionCreators';
+import { weatherSlice } from '../store/slices/weather';
 
 import { Container } from './Styles.app';
 
@@ -19,24 +20,55 @@ const theme = {
 };
 
 function App() {
-  const [weather, setWeather] = useState<IWeather>({});
-  const [isWeatherLoaded, setWeatherLoaded] = useState(false);
-  const [weekWeatherData, setWeekWeatherData] = useState<IWeekForecast>({});
-  const [units, setUnits] = useState('metric');
-  const [hourlyOrWeekly, setHourlyOrWeekly] = useState('weekly');
-  const [isError, setError] = useState(false);
+  const dispatch = useAppDispatch();
+  const { isLoaded, error, units } = useAppSelector(
+    (state) => state.weatherReducer,
+  );
 
-  const onWeatherLoaded = (weatherData: IWeather): void => {
-    setWeather(weatherData);
-    setWeatherLoaded(true);
+  const getCurrentWeather = () => {
+    const successCallback = async (position: {
+      coords: { latitude: number; longitude: number };
+    }) => {
+      dispatch(
+        fetchWeekWeather(
+          position.coords.latitude,
+          position.coords.longitude,
+          units,
+        ),
+      );
+      dispatch(
+        fetchGeoWeather(
+          position.coords.latitude,
+          position.coords.longitude,
+          units,
+        ),
+      );
+    };
+
+    const errorCallback = (error: { code: number; message: string }): void => {
+      dispatch(weatherSlice.actions.fetchWeatherError());
+      throw new Error(error.message);
+    };
+
+    const options = {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000,
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      successCallback,
+      errorCallback,
+      options,
+    );
   };
 
-  useEffect((): void => {
-    getCurrentLocation(units, setWeekWeatherData, onWeatherLoaded, setError);
+  useEffect(() => {
+    getCurrentWeather();
   }, []);
 
   const renderErrorMessage = () => {
-    return <>{isError && <ErrorBoundary />}</>;
+    return <>{error && <ErrorBoundary />}</>;
   };
 
   return (
@@ -44,23 +76,10 @@ function App() {
       {renderErrorMessage()}
 
       <ThemeProvider theme={theme}>
-        {isWeatherLoaded ? (
+        {isLoaded ? (
           <Container>
-            <Sidebar
-              units={units}
-              weather={weather}
-              setWeather={setWeather}
-              setWeekWeatherData={setWeekWeatherData}
-              weekWeatherData={weekWeatherData}
-            />
-            <Main
-              weekWeatherData={weekWeatherData}
-              setUnits={setUnits}
-              visibility={weather.visibility}
-              units={units}
-              hourlyOrWeekly={hourlyOrWeekly}
-              setHourlyOrWeekly={setHourlyOrWeekly}
-            />
+            <Sidebar />
+            <Main />
           </Container>
         ) : (
           <Spinner />

@@ -3,8 +3,9 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 
 import homeIcon from '../../assets/icons/homeIcon.svg';
 import searchIcon from '../../assets/icons/searchIcon.png';
+import { useAppDispatch } from '../../hooks/useTypedSelector';
 import useWeatherService from '../../services/weatherService';
-import { IWeather, IWeekForecast } from '../../types/types';
+import { fetchGeoWeather, fetchWeekWeather } from '../../store/actionCreators';
 import { getPosition } from '../../utils/position';
 
 import SidebarInputSuggestions from './SidebarInputSuggestions';
@@ -15,18 +16,13 @@ import {
 } from './Styles.sidebarHeader';
 
 interface SidebarHeaderProps {
-  setWeather: (weather: IWeather) => void;
-  setWeekWeatherData: (weather: IWeekForecast) => void;
   units: string;
 }
 
-const SidebarHeader: FC<SidebarHeaderProps> = ({
-  units,
-  setWeather,
-  setWeekWeatherData,
-}) => {
+const SidebarHeader: FC<SidebarHeaderProps> = ({ units }) => {
   const [location, setLocation] = useState('');
-  const { getWeatherByCity, getWeatherForWeek } = useWeatherService();
+  const { getWeatherByCity } = useWeatherService();
+  const dispatch = useAppDispatch();
 
   return (
     <StyledSidebarHeader>
@@ -35,14 +31,20 @@ const SidebarHeader: FC<SidebarHeaderProps> = ({
         onChange={setLocation}
         onSelect={() =>
           getWeatherByCity(location, units).then((res) => {
-            getWeatherForWeek(
-              res?.coord?.lat as number,
-              res?.coord?.lon as number,
-              units,
-            ).then((res) => {
-              res && setWeekWeatherData(res);
-            });
-            res && setWeather(res);
+            dispatch(
+              fetchWeekWeather(
+                res?.coord?.lat as number,
+                res?.coord?.lon as number,
+                units,
+              ),
+            );
+            dispatch(
+              fetchGeoWeather(
+                res?.coord?.lat as number,
+                res?.coord?.lon as number,
+                units,
+              ),
+            );
           })
         }
         searchOptions={{ types: ['locality', 'country'] }}
@@ -63,7 +65,7 @@ const SidebarHeader: FC<SidebarHeaderProps> = ({
       </PlacesAutocomplete>
       <StyledHeaderButton
         onClick={() => {
-          getPosition(setWeather, setWeekWeatherData, units);
+          getPosition(dispatch, units);
         }}
       >
         <img src={homeIcon} alt="home" />

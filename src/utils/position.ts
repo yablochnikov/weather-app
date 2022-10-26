@@ -1,66 +1,11 @@
-import useWeatherService from '../services/weatherService';
-import { IWeather, IWeekForecast } from '../types/types';
+import { fetchGeoWeather, fetchWeekWeather } from '../store/actionCreators';
+import { AppDispatch } from '../store/store';
 
-const { getWeatherByGeo, getWeatherForWeek } = useWeatherService();
-
-export const getPosition = (
-  setWeather: (weather: IWeather) => void,
-  setWeekWeatherData: (weather: IWeekForecast) => void,
-  units: string,
-) => {
+export const getPosition = (dispatch: AppDispatch, units: string) => {
   navigator.geolocation.getCurrentPosition((pos) => {
-    getWeatherByGeo(pos.coords.latitude, pos.coords.longitude, units).then(
-      (res) => {
-        res && setWeather(res);
-      },
+    dispatch(
+      fetchWeekWeather(pos.coords.latitude, pos.coords.longitude, units),
     );
-    getWeatherForWeek(pos.coords.latitude, pos.coords.longitude, units).then(
-      (res) => {
-        res && setWeekWeatherData(res);
-      },
-    );
+    dispatch(fetchGeoWeather(pos.coords.latitude, pos.coords.longitude, units));
   });
-};
-
-export const getCurrentLocation = (
-  units: string,
-  setWeekWeatherData: React.Dispatch<React.SetStateAction<IWeekForecast>>,
-  onWeatherLoaded: (weatherData: IWeather) => void,
-  setError: React.Dispatch<React.SetStateAction<boolean>>,
-): void => {
-  const successCallback = (position: {
-    coords: { latitude: number; longitude: number };
-  }) => {
-    getWeatherForWeek(
-      position.coords.latitude,
-      position.coords.longitude,
-      units,
-    ).then((data) => {
-      data && setWeekWeatherData(data);
-    });
-    getWeatherByGeo(
-      position.coords.latitude,
-      position.coords.longitude,
-      units,
-    ).then((data) => {
-      data && onWeatherLoaded(data);
-    });
-  };
-
-  const errorCallback = (error: { code: number; message: string }): void => {
-    setError(true);
-    throw new Error(error.message);
-  };
-
-  const options = {
-    enableHighAccuracy: true,
-    maximumAge: 0,
-    timeout: 1000,
-  };
-
-  navigator.geolocation.getCurrentPosition(
-    successCallback,
-    errorCallback,
-    options,
-  );
 };

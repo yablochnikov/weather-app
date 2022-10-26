@@ -5,7 +5,6 @@ import { IWeekForecast } from '../../types/types';
 import { StyledHeading1 } from './Styles.sidebarTemp';
 
 interface SidebarTempProps {
-  weekWeatherData: IWeekForecast;
   units: string;
   temp: number;
 }

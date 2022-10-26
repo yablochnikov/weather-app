@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cloud from '../../assets/icons/cloud.png';
 import infoIcon from '../../assets/icons/infoIcon.svg';
-import { IWeather, IWeekForecast } from '../../types/types';
+import { useAppSelector } from '../../hooks/useTypedSelector';
 import { toCapitalize } from '../../utils/helpers';
 
 import SidebarDay from './SidebarDayName';
@@ -18,31 +18,16 @@ import {
 } from './Styles.sidebar';
 import WeatherStatusBlock from './WeatherStatusBlock';
 
-interface SidebarProps {
-  weather: IWeather;
-  setWeather: (weather: IWeather) => void;
-  setWeekWeatherData: (weather: IWeekForecast) => void;
-  weekWeatherData: IWeekForecast;
-  units: string;
-}
-
-const Sidebar: FC<SidebarProps> = ({
-  units,
-  weather,
-  setWeather,
-  setWeekWeatherData,
-  weekWeatherData,
-}) => {
+const Sidebar: FC = () => {
+  const { weather, weekWeather, units } = useAppSelector(
+    (state) => state.weatherReducer,
+  );
   const image = `http://openweathermap.org/img/wn/${
     weather.weather?.[0].icon || ''
   }@4x.png`;
   return (
     <Content>
-      <SidebarHeader
-        units={units}
-        setWeather={setWeather}
-        setWeekWeatherData={setWeekWeatherData}
-      />
+      <SidebarHeader units={units} />
       <SidebarInfo>
         <StyledSidebarImage
           src={image}
@@ -50,7 +35,6 @@ const Sidebar: FC<SidebarProps> = ({
         />
         <SidebarTemp
           units={units}
-          weekWeatherData={weekWeatherData}
           temp={Math.round(weather.main?.temp as number)}
         />
 
@@ -58,7 +42,7 @@ const Sidebar: FC<SidebarProps> = ({
           {weather.name} <span>,{weather.sys?.country}</span>
         </StyledLocation>
 
-        <SidebarDay weekWeatherData={weekWeatherData} />
+        <SidebarDay weekWeather={weekWeather} />
 
         <StyledSidebarDivider />
 

@@ -1,5 +1,8 @@
 import { FC } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/useTypedSelector';
+import { weatherSlice } from '../../store/slices/weather';
+
 import {
   StyledButtonDays,
   StyledButtonMetric,
@@ -8,35 +11,29 @@ import {
   StyledMetricChange,
 } from './Styles.mainHeader';
 
-interface MainHeaderProps {
-  setUnits: (units: string) => void;
-  units: string;
-  hourlyOrWeekly: string;
-  setHourlyOrWeekly: (value: string) => void;
-}
+const MainHeader: FC = () => {
+  const { units, hourlyOrWeekly } = useAppSelector(
+    (state) => state.weatherReducer,
+  );
 
-const handleClick = (func: (string: string) => void, string: string) => {
-  func(string);
-};
+  const dispatch = useAppDispatch();
 
-const MainHeader: FC<MainHeaderProps> = ({
-  setUnits,
-  units,
-  setHourlyOrWeekly,
-  hourlyOrWeekly,
-}) => {
   return (
     <StyledMainHeader>
       <StyledDaysChange>
         <StyledButtonDays
-          onClick={() => handleClick(setHourlyOrWeekly, 'hourly')}
+          onClick={() =>
+            dispatch(weatherSlice.actions.setHourlyOrWeekly('hourly'))
+          }
           hourlyOrWeekly={hourlyOrWeekly}
           time={'hourly'}
         >
           Today
         </StyledButtonDays>
         <StyledButtonDays
-          onClick={() => handleClick(setHourlyOrWeekly, 'weekly')}
+          onClick={() =>
+            dispatch(weatherSlice.actions.setHourlyOrWeekly('weekly'))
+          }
           time={'weekly'}
           hourlyOrWeekly={hourlyOrWeekly}
         >
@@ -47,14 +44,14 @@ const MainHeader: FC<MainHeaderProps> = ({
         <StyledButtonMetric
           units={units}
           selectedUnits={'metric'}
-          onClick={() => handleClick(setUnits, 'metric')}
+          onClick={() => dispatch(weatherSlice.actions.setUnits('metric'))}
         >
           &deg;C
         </StyledButtonMetric>
         <StyledButtonMetric
           units={units}
           selectedUnits={'imperial'}
-          onClick={() => handleClick(setUnits, 'imperial')}
+          onClick={() => dispatch(weatherSlice.actions.setUnits('imperial'))}
         >
           &deg;F
         </StyledButtonMetric>

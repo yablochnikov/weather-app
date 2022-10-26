@@ -7,7 +7,7 @@ import minTemp from '../../assets/icons/minTemp.svg';
 import sunrise from '../../assets/icons/sunrise.svg';
 import sunset from '../../assets/icons/sunset.svg';
 import windIcon from '../../assets/icons/wind-icon.png';
-import { IWeekForecast } from '../../types/types';
+import { useAppSelector } from '../../hooks/useTypedSelector';
 import Map from '../Map/Map';
 import UVIndexChart from '../UVIndexChart/UVIndexChart';
 import HumidityInfo from './HumidityInfo';
@@ -28,23 +28,16 @@ import UVInfo from './UVInfo';
 import VisibilityInfo from './VisibilityInfo';
 import WindInfo from './WindInfo';
 
-interface TodayHighlightsInfoProps {
-  weekWeatherData: IWeekForecast;
-  visibility?: number;
-  units: string;
-}
-
-const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
-  visibility,
-  weekWeatherData,
-  units,
-}) => {
+const TodayHighlightsInfo: FC = () => {
+  const { weather, weekWeather, units } = useAppSelector(
+    (state) => state.weatherReducer,
+  );
   const centerCords = {
-    lat: weekWeatherData.lat as number,
-    lng: weekWeatherData.lon as number,
+    lat: weekWeather.lat as number,
+    lng: weekWeather.lon as number,
   };
 
-  visibility = (visibility as number) / 1000;
+  const visibility = (weather.visibility as number) / 1000;
 
   return (
     <InfoWrapper>
@@ -53,15 +46,11 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
           <CardLabel>UV Index</CardLabel>
           <CardBody>
             <UVInfo
-              data={
-                weekWeatherData.daily &&
-                (weekWeatherData.daily[0].uvi as number)
-              }
+              data={weekWeather.daily && (weekWeather.daily[0].uvi as number)}
             >
               <UVIndexChart
                 uvIndex={
-                  weekWeatherData.daily &&
-                  (weekWeatherData.daily[0].uvi as number)
+                  weekWeather.daily && (weekWeather.daily[0].uvi as number)
                 }
               />
             </UVInfo>
@@ -71,9 +60,7 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
           <CardLabel>Wind status</CardLabel>
           <CardBody>
             <WindInfo
-              data={
-                weekWeatherData.daily && weekWeatherData.daily[0].wind_speed
-              }
+              data={weekWeather.daily && weekWeather.daily[0].wind_speed}
               units={units}
             />
             <CardImg src={windIcon} width={40} height={25} marginTop={18} />
@@ -86,15 +73,15 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
               img={sunrise}
               alt="sunrise"
               hours={
-                weekWeatherData.daily &&
+                weekWeather.daily &&
                 new Date(
-                  (weekWeatherData.daily[0].sunrise as number) * 1000,
+                  (weekWeather.daily[0].sunrise as number) * 1000,
                 ).getHours()
               }
               minutes={
-                weekWeatherData.daily &&
+                weekWeather.daily &&
                 new Date(
-                  (weekWeatherData.daily[0].sunrise as number) * 1000,
+                  (weekWeather.daily[0].sunrise as number) * 1000,
                 ).getMinutes()
               }
             />
@@ -102,15 +89,15 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
               img={sunset}
               alt="sunset"
               hours={
-                weekWeatherData.daily &&
+                weekWeather.daily &&
                 new Date(
-                  (weekWeatherData.daily[0].sunset as number) * 1000,
+                  (weekWeather.daily[0].sunset as number) * 1000,
                 ).getHours()
               }
               minutes={
-                weekWeatherData.daily &&
+                weekWeather.daily &&
                 new Date(
-                  (weekWeatherData.daily[0].sunset as number) * 1000,
+                  (weekWeather.daily[0].sunset as number) * 1000,
                 ).getMinutes()
               }
             />
@@ -120,13 +107,11 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
           <CardLabel>Humidity</CardLabel>
           <CardBody>
             <HumidityInfo
-              data={weekWeatherData.daily && weekWeatherData.daily[0].humidity}
+              data={weekWeather.daily && weekWeather.daily[0].humidity}
             ></HumidityInfo>
             <ProgressBarWrapper>
               <ProgressBar
-                percent={
-                  weekWeatherData.daily && weekWeatherData.daily[0].humidity
-                }
+                percent={weekWeather.daily && weekWeather.daily[0].humidity}
               />
             </ProgressBarWrapper>
           </CardBody>
@@ -142,16 +127,18 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
           <CardBody>
             <TemperatureInfo
               img={minTemp}
+              units={units}
               data={
-                weekWeatherData.daily &&
-                Math.round(weekWeatherData.daily[0].temp?.min as number)
+                weekWeather.daily &&
+                Math.round(weekWeather.daily[0].temp?.min as number)
               }
             />
             <TemperatureInfo
               img={maxTemp}
+              units={units}
               data={
-                weekWeatherData.daily &&
-                Math.round(weekWeatherData.daily[0].temp?.max as number)
+                weekWeather.daily &&
+                Math.round(weekWeather.daily[0].temp?.max as number)
               }
             />
           </CardBody>
@@ -167,8 +154,8 @@ const TodayHighlightsInfo: FC<TodayHighlightsInfoProps> = ({
           defaultZoom={13}
         >
           <Map
-            lat={weekWeatherData.lat as number}
-            lng={weekWeatherData.lon as number}
+            lat={weekWeather.lat as number}
+            lng={weekWeather.lon as number}
           ></Map>
         </GoogleMapReact>
       </MapWrapper>

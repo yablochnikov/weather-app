@@ -9,8 +9,10 @@ const WindInfo: FC<WindInfoProps> = ({ data, units }) => {
     <div>
       <span>
         {Math.round(
-          units === 'imperial' ? (data as number) * 1.6 : (data as number),
-        )}
+          units === 'imperial'
+            ? ((data && data) as number) * 1.6
+            : ((data && data) as number),
+        ) + ''}
       </span>
       {units === 'metric' ? 'km/h' : 'mp/h'}
     </div>

@@ -1,26 +1,19 @@
 import { FC } from 'react';
 import dayjs from 'dayjs';
 
-import { IWeekForecast } from '../../types/types';
+import { useAppSelector } from '../../hooks/useTypedSelector';
 
 import ForecastItem from './ForecastItem';
 import { StyledForecast } from './ForecastStyles';
 
-interface WeeklyForecastProps {
-  weekWeatherData: IWeekForecast;
-  hourlyOrWeekly: string;
-  units: string;
-}
-
-const Forecast: FC<WeeklyForecastProps> = ({
-  weekWeatherData,
-  hourlyOrWeekly,
-  units,
-}) => {
+const Forecast: FC = () => {
+  const { weekWeather, units, hourlyOrWeekly } = useAppSelector(
+    (state) => state.weatherReducer,
+  );
   return (
     <StyledForecast hourlyOrWeekly={hourlyOrWeekly}>
       {hourlyOrWeekly === 'weekly'
-        ? weekWeatherData.daily?.map((day, i) => {
+        ? weekWeather.daily?.map((day, i) => {
             return (
               <ForecastItem
                 units={units}
@@ -35,7 +28,7 @@ const Forecast: FC<WeeklyForecastProps> = ({
               />
             );
           })
-        : weekWeatherData.hourly?.slice(0, 12).map((hour, i) => {
+        : weekWeather.hourly?.slice(0, 24).map((hour, i) => {
             return (
               <ForecastItem
                 units={units}

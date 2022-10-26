@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { IWeekForecast } from '../../types/types';
 import { addZero } from '../../utils/helpers';
 interface SidebarDayNameProps {
-  weekWeatherData: IWeekForecast;
+  weekWeather: IWeekForecast;
 }
 
 const StyledDay = styled.p`
@@ -24,11 +24,11 @@ const StyledDay = styled.p`
   }
 `;
 
-const SidebarDay: FC<SidebarDayNameProps> = ({ weekWeatherData }) => {
+const SidebarDay: FC<SidebarDayNameProps> = ({ weekWeather }) => {
   const date = new Date();
 
   const dayName = date.toLocaleString('en-US', {
-    timeZone: weekWeatherData.timezone,
+    timeZone: weekWeather.timezone,
     weekday: 'long',
   });
   return (
@@ -38,7 +38,7 @@ const SidebarDay: FC<SidebarDayNameProps> = ({ weekWeatherData }) => {
         {date.toLocaleString('en-US', {
           hour: '2-digit',
           hour12: false,
-          timeZone: weekWeatherData.timezone,
+          timeZone: weekWeather.timezone,
         })}
         :{addZero(date.getUTCMinutes())}
       </span>
