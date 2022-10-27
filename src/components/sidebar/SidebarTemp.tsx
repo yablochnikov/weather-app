@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import { IWeekForecast } from '../../types/types';
-
 import { StyledHeading1 } from './Styles.sidebarTemp';
 
 interface SidebarTempProps {

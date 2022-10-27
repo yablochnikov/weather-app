@@ -10,7 +10,6 @@ export const InfoWrapper = styled.div`
 export const CardLabel = styled.h3`
   font-weight: 600;
   font-size: 14px;
-
   color: ${(props) => props.theme.additionalGray};
 `;
 
@@ -41,8 +40,6 @@ export const DayInfoCard = styled.div`
   background-color: ${(props) => props.theme.sidebarBg};
   padding: 12px;
 
-  @media (max-width: 1336px) {
-  }
   @media (max-width: 1024px) {
     margin-right: 10px;
   }
@@ -53,9 +50,11 @@ export const DayInfo = styled.div`
   flex-wrap: wrap;
   width: 65%;
   justify-content: space-between;
+
   @media (max-width: 1336px) {
     width: 100%;
   }
+
   @media (max-width: 1024px) {
     justify-content: space-around;
   }

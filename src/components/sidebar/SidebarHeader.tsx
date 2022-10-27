@@ -3,10 +3,11 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 
 import homeIcon from '../../assets/icons/homeIcon.svg';
 import searchIcon from '../../assets/icons/searchIcon.png';
-import { useAppDispatch } from '../../hooks/useTypedSelector';
+import { useAppDispatch, useAppSelector } from '../../hooks/useTypedSelector';
 import useWeatherService from '../../services/weatherService';
-import { fetchGeoWeather, fetchWeekWeather } from '../../store/actionCreators';
+import { fetchWeather } from '../../store/actionCreators';
 import { getPosition } from '../../utils/position';
+import NoCityMatch from '../Toast/NoCityMatch';
 
 import SidebarInputSuggestions from './SidebarInputSuggestions';
 import {
@@ -15,36 +16,36 @@ import {
   StyledSidebarHeader,
 } from './Styles.sidebarHeader';
 
-interface SidebarHeaderProps {
-  units: string;
-}
-
-const SidebarHeader: FC<SidebarHeaderProps> = ({ units }) => {
+const SidebarHeader: FC = () => {
   const [location, setLocation] = useState('');
+  const { units } = useAppSelector((state) => state.weatherReducer);
   const { getWeatherByCity } = useWeatherService();
   const dispatch = useAppDispatch();
+  const [noMatch, setNomatch] = useState(false);
 
+  const renderErrorMessage = () => {
+    setTimeout(() => {
+      setNomatch(false);
+    }, 6300);
+    return <>{noMatch && <NoCityMatch />}</>;
+  };
   return (
     <StyledSidebarHeader>
+      {renderErrorMessage()}
+
       <PlacesAutocomplete
         value={location}
         onChange={setLocation}
         onSelect={() =>
           getWeatherByCity(location, units).then((res) => {
-            dispatch(
-              fetchWeekWeather(
-                res?.coord?.lat as number,
-                res?.coord?.lon as number,
-                units,
-              ),
-            );
-            dispatch(
-              fetchGeoWeather(
-                res?.coord?.lat as number,
-                res?.coord?.lon as number,
-                units,
-              ),
-            );
+            res
+              ? dispatch(
+                  fetchWeather({
+                    lat: res?.coord?.lat as number,
+                    lon: res?.coord?.lon as number,
+                  }),
+                )
+              : setNomatch(true);
           })
         }
         searchOptions={{ types: ['locality', 'country'] }}
@@ -65,7 +66,7 @@ const SidebarHeader: FC<SidebarHeaderProps> = ({ units }) => {
       </PlacesAutocomplete>
       <StyledHeaderButton
         onClick={() => {
-          getPosition(dispatch, units);
+          getPosition(dispatch);
         }}
       >
         <img src={homeIcon} alt="home" />

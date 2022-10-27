@@ -6,8 +6,7 @@ import Sidebar from '../components/Sidebar/Sidebar';
 import Spinner from '../components/spinner/spinner';
 import ErrorBoundary from '../components/Toast/ErrorToast';
 import { useAppDispatch, useAppSelector } from '../hooks/useTypedSelector';
-import { fetchGeoWeather, fetchWeekWeather } from '../store/actionCreators';
-import { weatherSlice } from '../store/slices/weather';
+import { getCurrentWeather } from '../utils/position';
 
 import { Container } from './Styles.app';
 
@@ -21,50 +20,10 @@ const theme = {
 
 function App() {
   const dispatch = useAppDispatch();
-  const { isLoaded, error, units } = useAppSelector(
-    (state) => state.weatherReducer,
-  );
-
-  const getCurrentWeather = () => {
-    const successCallback = async (position: {
-      coords: { latitude: number; longitude: number };
-    }) => {
-      dispatch(
-        fetchWeekWeather(
-          position.coords.latitude,
-          position.coords.longitude,
-          units,
-        ),
-      );
-      dispatch(
-        fetchGeoWeather(
-          position.coords.latitude,
-          position.coords.longitude,
-          units,
-        ),
-      );
-    };
-
-    const errorCallback = (error: { code: number; message: string }): void => {
-      dispatch(weatherSlice.actions.fetchWeatherError());
-      throw new Error(error.message);
-    };
-
-    const options = {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 5000,
-    };
-
-    navigator.geolocation.getCurrentPosition(
-      successCallback,
-      errorCallback,
-      options,
-    );
-  };
+  const { isLoaded, error } = useAppSelector((state) => state.weatherReducer);
 
   useEffect(() => {
-    getCurrentWeather();
+    getCurrentWeather(dispatch);
   }, []);
 
   const renderErrorMessage = () => {

@@ -1,11 +1,46 @@
-import { fetchGeoWeather, fetchWeekWeather } from '../store/actionCreators';
+import { fetchWeather } from '../store/actionCreators';
+import { weatherSlice } from '../store/slices/weather';
 import { AppDispatch } from '../store/store';
 
-export const getPosition = (dispatch: AppDispatch, units: string) => {
+export const getPosition = (dispatch: AppDispatch) => {
+  dispatch(weatherSlice.actions.fetchWeather());
+
   navigator.geolocation.getCurrentPosition((pos) => {
     dispatch(
-      fetchWeekWeather(pos.coords.latitude, pos.coords.longitude, units),
+      fetchWeather({
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+      }),
     );
-    dispatch(fetchGeoWeather(pos.coords.latitude, pos.coords.longitude, units));
   });
+};
+
+export const getCurrentWeather = (dispatch: AppDispatch) => {
+  const successCallback = async (pos: {
+    coords: { latitude: number; longitude: number };
+  }) => {
+    dispatch(
+      fetchWeather({
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+      }),
+    );
+  };
+
+  const errorCallback = (error: { code: number; message: string }): void => {
+    dispatch(weatherSlice.actions.fetchWeatherError());
+    throw new Error(error.message);
+  };
+
+  const options = {
+    enableHighAccuracy: true,
+    maximumAge: 0,
+    timeout: 5000,
+  };
+
+  navigator.geolocation.getCurrentPosition(
+    successCallback,
+    errorCallback,
+    options,
+  );
 };

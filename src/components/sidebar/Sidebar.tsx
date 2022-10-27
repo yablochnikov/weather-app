@@ -27,7 +27,7 @@ const Sidebar: FC = () => {
   }@4x.png`;
   return (
     <Content>
-      <SidebarHeader units={units} />
+      <SidebarHeader />
       <SidebarInfo>
         <StyledSidebarImage
           src={image}
@@ -39,7 +39,8 @@ const Sidebar: FC = () => {
         />
 
         <StyledLocation>
-          {weather.name} <span>,{weather.sys?.country}</span>
+          {weather.name}
+          <span>, {weather.sys?.country}</span>
         </StyledLocation>
 
         <SidebarDay weekWeather={weekWeather} />

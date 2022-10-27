@@ -10,7 +10,7 @@ interface VisibilityInfoProps {
 const VisibilityInfo: FC<VisibilityInfoProps> = ({ data }) => {
   return (
     <div>
-      <span>{data}</span>
+      <span>{data ? data : 'Loading...'}</span>
       km/h
       <CardImg src={visibilityIcon} width={40} height={35} marginTop={8} />
     </div>
