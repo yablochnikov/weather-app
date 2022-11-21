@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components';
 
 import Main from '../components/Main/Main';
 import Sidebar from '../components/Sidebar/Sidebar';
-import Spinner from '../components/spinner/spinner';
+import Spinner from '../components/Spinner';
 import useWeatherService from '../services/weatherService';
 import { IWeather, IWeekForecast } from '../types/types';
 
